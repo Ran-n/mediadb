@@ -338,7 +338,7 @@ if __name__=="__main__":
 	__idioma = 'gl'
 
 	# ficheiro e variable onde se gardarán todas as pelis
-	__findice = 'indice'
+	__findice = 'indice.json'
 	__indice = {}
 
 	# nome do ficheiro e variable onde se gardarán todos os idiomas coas súas claves
@@ -360,7 +360,7 @@ if __name__=="__main__":
 	# unha vez temos a ruta podemos cargar o ficheiro cos datos
 	__indice = u.cargar_json(__ruta+__findice)
 
-	__codsIdiomas = u.cargar_json_ninja(__fcodsIdiomas)
+	__codsIdiomas = u.cargar_json(__fcodsIdiomas)
 
 	if len(sys.argv)>1:
 

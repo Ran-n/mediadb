@@ -18,15 +18,6 @@ lang=gl
 #------------------------------------------------------------------------------------------------
 # función encargada de cargar ficheiros tipo json
 def cargar_json(fich):
-	fich = fich +'.json'
-	if Path(fich).is_file():
-		return json.loads(open(fich).read())
-	else:
-		open(fich, 'w').write('{}')
-		return json.loads(open(fich).read())
-#------------------------------------------------------------------------------------------------
-# función encargada de cargar ficheiros tipo json sen a extensión
-def cargar_json_ninja(fich):
 	if Path(fich).is_file():
 		return json.loads(open(fich).read())
 	else:
@@ -35,11 +26,7 @@ def cargar_json_ninja(fich):
 #------------------------------------------------------------------------------------------------
 # función de gardado de ficheiros tipo json
 def gardar_json(fich, contido, sort=False):
-	open(fich+'.json', 'w').write(json.dumps(contido, indent=4, sort_keys=sort, ensure_ascii=False))
-#------------------------------------------------------------------------------------------------
-# función de gardado de ficheiros tipo json sen a extensión
-def gardar_json_ninja(fich, contido, sort=False):
-	open(fich+'.json', 'w').write(json.dumps(contido, indent=4, sort_keys=sort, ensure_ascii=False))
+	open(fich, 'w').write(json.dumps(contido, indent=4, sort_keys=sort, ensure_ascii=False))
 #------------------------------------------------------------------------------------------------
 def crear_carp(carp):
 	if Path(carp).is_dir() == False:
