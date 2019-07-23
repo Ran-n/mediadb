@@ -93,7 +93,7 @@ def dialogNome():
 #------------------------------------------------------------------------------------------------
 def dialogTipo():
 	while True:
-		tipo = input(_(' > Tipo (serie, peli, docu, video, libro): ')).lower()
+		tipo = input(_(' > Tipo (serie, peli, docu, video, libro, musica): ')).lower()
 		valido, tipo = tipoValido(tipo)
 		if valido:
 			break
@@ -315,19 +315,22 @@ def auto():
 	print('auto')
 #------------------------------------------------------------------------------------------------
 def config():
-	raiz = '../'
 	config = u.read_config()
 
+	'''
 	for index, value in enumerate(config):
 		if value != '':
 			if index==0:
 				raiz=value+'/'
 			if index==1:
 				lang=value
+			if index==2:
+				nome=value
 		else:
 			print('a')
+	'''
 
-	return str(raiz), str(lang)
+	return config['raiz']+'/', config['lang'], config['nome']
 #------------------------------------------------------------------------------------------------
 if __name__=="__main__":
 	_ = gettext.gettext
@@ -336,26 +339,26 @@ if __name__=="__main__":
 	__ruta = '../proba'
 	# idioma por defecto da app
 	__idioma = 'gl'
-
 	# ficheiro e variable onde se gardarán todas as pelis
 	__findice = 'indice.json'
 	__indice = {}
 
 	# nome do ficheiro e variable onde se gardarán todos os idiomas coas súas claves
-	__fcodsIdiomas = 'media/codesIdiomas'
+	__fcodsIdiomas = '../media/codesIdiomas'
 	__codsIdiomas = {}
 
 	__codes = {'serie': 's',
 				'peli': 'p',
 				'docu': 'd',
 				'video': 'v',
-				'libro': 'l'}
+				'libro': 'l',
+				'musica': 'm'}
 
 	__sis = ('si', 's', 'yes', 'y')
 	__nons = ('non', 'no', 'n')
 
 	# caragamos o idioma e a configuración do ficheiro de configuración
-	__ruta, __idioma = config()
+	__ruta, __idioma, __findice = config()
 
 	# unha vez temos a ruta podemos cargar o ficheiro cos datos
 	__indice = u.cargar_json(__ruta+__findice)

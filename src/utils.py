@@ -3,17 +3,21 @@
 #+ Autor:	Ran#
 #+ Creado:	19/07/2019 16:45:18
 #+ Editado:	22/07/2019 14:04:21
+## do ficheiro mediadb.py
 #------------------------------------------------------------------------------------------------
 import json
 from pathlib import Path
 #------------------------------------------------------------------------------------------------
-texto_config = '''# NON ALTERAR O ORDE DAS LIÑAS CON ELEMENTOS DE CONFIGURACIÓN
+texto_config = '''
 # selecionar carpeta raiz, . significa carpeta actual
 raiz=.
 
 # selecionar o idioma para a versión interactiva
 # galego (gl), inglés (en), castelán (es)
 lang=gl
+
+# nome da base de datos
+nome=indice.json
 '''
 #------------------------------------------------------------------------------------------------
 # función encargada de cargar ficheiros tipo json
@@ -39,8 +43,24 @@ def pJson(diccionario, sort=False):
 def read_config():
 	fich = '../.config'
 	if Path(fich).is_file():
-		# lemos todas as liñas do ficheiro e quitamoslle os \n e de todas as liñas só nos quedamos coas que non comezan por un comentario
-		return [x.strip().split('=')[1] for x in open(fich) if not x.strip().startswith('#') and x.strip() != '']
+		config = {}
+		'''
+		lemos todas as liñas do ficheiro e quitamoslle os \n
+		de todas as liñas só nos quedamos coas que non comezan por un comentario
+		Das liñas de configuración o que facemos e separalas por igual e quedarnos
+		co segundo elemento, co cal a orde dos elementos non debe ser alterada.
+		Poderíase facer que mirase o nome da variable pero da pereza e non ten sentido.
+		'''
+		for x in open(fich):
+			''' facemos isto porque debe ser máis eficiente ca facer senón strip
+			cada vez que chamemos a x'''
+			x = x.strip()
+			if not x.startswith('#') and x != '':
+				config[x.split('=')[0].strip()] = x.split('=')[1].strip()
+		return config
+
+		# vello método dependente da orde
+		# return [x.strip().split('=')[1] for x in open(fich) if not x.strip().startswith('#') and x.strip() != '']
 
 	else:
 		open(fich, 'w').write(texto_config)
