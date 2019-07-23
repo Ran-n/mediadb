@@ -2,15 +2,17 @@
 # -*- coding: utf-8 -*-
 #+ Autor:	Ran#
 #+ Creado:	21/07/2019 18:35:49
-#+ Editado:	22/07/2019 14:04:30
+#+ Editado:	23/07/2019 16:02:32
 #------------------------------------------------------------------------------------------------
 import utils as u
 import base36 as b36
 import cronos as c
+# ----------------------------
 import gettext
 import sys
 from functools import partial
 #------------------------------------------------------------------------------------------------
+# función que dados todos os valores dunha función devolve un elemento completo
 def engadir(nome, tipo, lugar, video, ano, anof, audio, subs, calidade, peso, xenero, creador):
 	global __indice
 	elto={}
@@ -31,6 +33,7 @@ def engadir(nome, tipo, lugar, video, ano, anof, audio, subs, calidade, peso, xe
 	# metemos o elemento con chave a data de metida en codigo 36
 	__indice[b36.code(c.getAgora())] = elto
 #------------------------------------------------------------------------------------------------
+# función que devolve verdadeiro ou falso dependendo de se o nome introducido é valido ou non
 def nomeValido(nome):
 	if nome == '':
 		return False
@@ -40,6 +43,7 @@ def nomeValido(nome):
 				return False
 	return True
 #------------------------------------------------------------------------------------------------
+# función que devolve verdadeiro ou falso dependendo de se o tipo de contido introducido é valido ou non
 def tipoValido(tipo):
 	if tipo in __codes:
 		tipo = __codes[tipo]
@@ -48,26 +52,8 @@ def tipoValido(tipo):
 		return True, tipo
 	else:
 		return False, None
-
 #------------------------------------------------------------------------------------------------
-def snValido(resposta):
-	if resposta in __sis:
-		# valido e resposta
-		return True, True
-	# non poñer nada conta como dicir non
-	elif resposta in __nons or resposta == '':
-		return True, False
-	else:
-		return False, False
-#------------------------------------------------------------------------------------------------
-def anoValido(ano):
-	if ano == '':
-		return True
-	elif ano.isdigit():
-		return True
-	else:
-		return False
-#------------------------------------------------------------------------------------------------
+# función que indica se o idioma indicado por entrada está dentro da lista de idiomas na carpeta media
 def idiomasValidos(array):
 	# se nos pide axuda será sempre no primeiro, así evitamos comparacións no bucle for
 	if array[0] == '.':
@@ -84,6 +70,7 @@ def idiomasValidos(array):
 	# se non sae por ningún dos outros lados e que esta todo ok
 	return True
 #------------------------------------------------------------------------------------------------
+# función que se encarga de de interactuar co usuario para conseguir un nome
 def dialogNome():
 	while True:
 		nome = input(_(' > Nome: ')).lower()
@@ -91,6 +78,7 @@ def dialogNome():
 			break
 	return nome
 #------------------------------------------------------------------------------------------------
+# función que se encarga de de interactuar co usuario para conseguir un tipo
 def dialogTipo():
 	while True:
 		tipo = input(_(' > Tipo (serie, peli, docu, video, libro, musica): ')).lower()
@@ -99,30 +87,35 @@ def dialogTipo():
 			break
 	return tipo
 #------------------------------------------------------------------------------------------------
+# función que se encarga de de interactuar co usuario para conseguir un lugar
 def dialogLugar():
 	return input(_(' > Di onde está: ')).lower()
 #------------------------------------------------------------------------------------------------
+# función que se encarga de de interactuar co usuario para conseguir se ten video ou non
 def dialogVideo():
 	while True:
-		valido, video = snValido(input(_(' > Ten video? (s/n): ')).lower())
+		valido, video = u.snValido(input(_(' > Ten video? (s/n): ')).lower())
 		if valido:
 			break
 	return video
 #------------------------------------------------------------------------------------------------
+# función que se encarga de de interactuar co usuario para conseguir un ano de saida
 def dialogAno():
 	while True:
 		ano = input(_(' > Ano de inicio: '))
-		if anoValido(ano):
+		if u.anoValido(ano):
 			break
 	return ano
 #------------------------------------------------------------------------------------------------
+# función que se encarga de de interactuar co usuario para conseguir un ano de fin
 def dialogAnoF():
 	while True:
 		anof = input(_(' > Ano de fin: '))
-		if anoValido(anof):
+		if u.anoValido(anof):
 			break
 	return anof
 #------------------------------------------------------------------------------------------------
+# función que se encarga de de interactuar co usuario para conseguir os audios se os ten
 def dialogAudio():
 	while True:
 		audio = input(_(' > Audios separados por coma (. para info): ')).split(',')
@@ -130,6 +123,7 @@ def dialogAudio():
 			break
 	return audio
 #------------------------------------------------------------------------------------------------
+# función que se encarga de de interactuar co usuario para conseguir os subtítulos se os ten
 def dialogSubs():
 	while True:
 		subs = input(_(' > Subtitulos separados por coma (. para info): ')).split(',')
@@ -137,18 +131,23 @@ def dialogSubs():
 			break
 	return subs
 #------------------------------------------------------------------------------------------------
+# función que se encarga de de interactuar co usuario para conseguir as calidades se as ten
 def dialogCalidade():
 	return input(_(' > Calidades separados por coma: ')).split(',')
 #------------------------------------------------------------------------------------------------
+# función que se encarga de de interactuar co usuario para conseguir os pesos se os ten
 def dialogPeso():
 	return input(_(' > Pesos separados por coma: ')).split(',')
 #------------------------------------------------------------------------------------------------
+# función que se encarga de de interactuar co usuario para conseguir os xéneros se os ten
 def dialogXenero():
 	return input(_(' > Xéneros separados por coma: ')).split(',')
 #------------------------------------------------------------------------------------------------
+# función que se encarga de de interactuar co usuario para conseguir os creadores se os ten
 def dialogCreador():
 	return input(_(' > Creadores separados por coma: ')).split(',')
 #------------------------------------------------------------------------------------------------
+# función que se encarga de indicar a operación é chamar a tódolos diálogos para mandar o valor á función de engadir
 def dialogEngadir():
 	print('\n-----------------------')
 	print(_('*> Pantalla de engadir:'))
@@ -157,19 +156,22 @@ def dialogEngadir():
 	engadir(dialogNome(), dialogTipo(), dialogLugar(), dialogVideo(), dialogAno(), dialogAnoF(),
 	dialogAudio(), dialogSubs(), dialogCalidade(), dialogPeso(), dialogXenero(), dialogCreador())
 #------------------------------------------------------------------------------------------------
+# función que colle e cambia un campo da variable que garda tódolos
 def editar(chave, campo, valor):
 	# é mellor editar directamente no array ca copiar e logo meter no array porque
 	# da máis carga e acabase precisando o global igual
 	global __indice
-
 	__indice[chave][campo] = valor
 #------------------------------------------------------------------------------------------------
+# función que se encarga de axudar á interacción co usuario na edición dun elemento
 def dialogEditarAux(chave):
-	print(_('*> Dime que queres editar, o que cala non otorga:'))
+	print(_('*> Dime que queres editar:, o que cala non otorga :'))
+	if '.' == input(_('*> O que cala non otorga, para ver os valores anteriores pulsa punto (.):')):
+		u.pJson(__indice[chave])
 
 	# nome
 	while True:
-		valido, edicion = snValido(input(_(' > Editar nome? (s/n): ')).lower())
+		valido, edicion = u.snValido(input(_(' > Editar nome? (s/n): ')).lower())
 		if valido:
 			break
 	if edicion:
@@ -179,7 +181,7 @@ def dialogEditarAux(chave):
 
 	# tipo
 	while True:
-		valido, edicion = snValido(input(_(' > Editar tipo? (s/n): ')).lower())
+		valido, edicion = u.snValido(input(_(' > Editar tipo? (s/n): ')).lower())
 		if valido:
 			break
 	if edicion:
@@ -187,7 +189,7 @@ def dialogEditarAux(chave):
 
 	# lugar
 	while True:
-		valido, edicion = snValido(input(_(' > Editar lugar? (s/n): ')).lower())
+		valido, edicion = u.snValido(input(_(' > Editar lugar? (s/n): ')).lower())
 		if valido:
 			break
 	if edicion:
@@ -195,7 +197,7 @@ def dialogEditarAux(chave):
 
 	# video
 	while True:
-		valido, edicion = snValido(input(_(' > Editar video? (s/n): ')).lower())
+		valido, edicion = u.snValido(input(_(' > Editar video? (s/n): ')).lower())
 		if valido:
 			break
 	if edicion:
@@ -203,7 +205,7 @@ def dialogEditarAux(chave):
 
 	# ano
 	while True:
-		valido, edicion = snValido(input(_(' > Editar ano de estrea? (s/n): ')).lower())
+		valido, edicion = u.snValido(input(_(' > Editar ano de estrea? (s/n): ')).lower())
 		if valido:
 			break
 	if edicion:
@@ -211,7 +213,7 @@ def dialogEditarAux(chave):
 
 	# anof
 	while True:
-		valido, edicion = snValido(input(_(' > Editar ano fin? (s/n): ')).lower())
+		valido, edicion = u.snValido(input(_(' > Editar ano fin? (s/n): ')).lower())
 		if valido:
 			break
 	if edicion:
@@ -219,7 +221,7 @@ def dialogEditarAux(chave):
 
 	# audio
 	while True:
-		valido, edicion = snValido(input(_(' > Editar audio? (s/n): ')).lower())
+		valido, edicion = u.snValido(input(_(' > Editar audio? (s/n): ')).lower())
 		if valido:
 			break
 	if edicion:
@@ -227,7 +229,7 @@ def dialogEditarAux(chave):
 
 	# subs
 	while True:
-		valido, edicion = snValido(input(_(' > Editar subtítulos? (s/n): ')).lower())
+		valido, edicion = u.snValido(input(_(' > Editar subtítulos? (s/n): ')).lower())
 		if valido:
 			break
 	if edicion:
@@ -235,15 +237,16 @@ def dialogEditarAux(chave):
 
 	# calidade
 	while True:
-		valido, edicion = snValido(input(_(' > Editar calidade? (s/n): ')).lower())
+		valido, edicion = u.snValido(input(_(' > Editar calidade? (s/n): ')).lower())
 		if valido:
 			break
 	if edicion:
 		editar(chave, 'calidade', dialogCalidade())
 
+
 	# peso
 	while True:
-		valido, edicion = snValido(input(_(' > Editar peso? (s/n): ')).lower())
+		valido, edicion = u.snValido(input(_(' > Editar peso? (s/n): ')).lower())
 		if valido:
 			break
 	if edicion:
@@ -251,7 +254,7 @@ def dialogEditarAux(chave):
 
 	# xenero
 	while True:
-		valido, edicion = snValido(input(_(' > Editar xenero? (s/n): ')).lower())
+		valido, edicion = u.snValido(input(_(' > Editar xenero? (s/n): ')).lower())
 		if valido:
 			break
 	if edicion:
@@ -259,21 +262,26 @@ def dialogEditarAux(chave):
 
 	# creador
 	while True:
-		valido, edicion = snValido(input(_(' > Editar creador? (s/n): ')).lower())
+		valido, edicion = u.snValido(input(_(' > Editar creador? (s/n): ')).lower())
 		if valido:
 			break
 	if edicion:
 		editar(chave, 'creador', dialogCreador())
 #------------------------------------------------------------------------------------------------
+# función que marca a operación de editar e vai chamando á función auxiliar de edición por cada
+# elemento con ese nome
 def dialogEditar():
 	print('\n-----------------------')
 	print(_('*> Pantalla de edición:'))
 	print('-----------------------')
+	#i# poñoo aqui e non na propia comparación porque senón tería que meter o valor
+	## por cada elemento do diccionario   
 	nome = input(_('Nome da serie a editar: ')).lower()
 	for chave, valor in __indice.items():
 		if nome == valor['nome']:
 			dialogEditarAux(chave)
 #------------------------------------------------------------------------------------------------
+# función base que se encarga de mostrar o menú de opcións ao usuario e chamar á opción seleccionada
 def menu(operacions):
 	while True:
 		print('\n-----------------------')
@@ -282,25 +290,26 @@ def menu(operacions):
 		print(_('0 - Sair (0. para non gardar)'))
 		print(_('1 - Engadir'))
 		print(_('2 - Editar'))
-		print(_('3 - Buscar por título'))
+		print(_('3 - Buscar por título**'))
 
 		op = input(_('Opción: '))
 		print('-----------------------')
 
 		if op in operacions:
-			break
+			return op
 		else:
 			print(_('Selecciona unha das posibles.\n'))
 
-	return op
 #------------------------------------------------------------------------------------------------
 # función que se encarga de gardar todo en memoria e sair da execución
 def sair():
-	u.gardar_json(__ruta+__findice, __indice, True)
+	# garda o ficheiro co indice de tódolos elementos
+	u.gardar_json(__config['ruta']+__config['nomeFich'], __indice, True)
 	exit()
 #------------------------------------------------------------------------------------------------
 # función controladora do modo manual da ap
 def manual():
+	# diccionario con todas as opcións posibles
 	ops = {'0.': exit,
 			'0': sair,
 			'1': dialogEngadir,
@@ -314,39 +323,42 @@ def manual():
 def auto():
 	print('auto')
 #------------------------------------------------------------------------------------------------
+# función que lee o ficheiro de configuración e devolve os valores
 def config():
-	config = u.read_config()
-
-	'''
-	for index, value in enumerate(config):
-		if value != '':
-			if index==0:
-				raiz=value+'/'
-			if index==1:
-				lang=value
-			if index==2:
-				nome=value
-		else:
-			print('a')
-	'''
-
-	return config['raiz']+'/', config['lang'], config['nome']
+	return u.read_config()
 #------------------------------------------------------------------------------------------------
+# función main do programa e onde se fan as declaracións e toma de valores iniciais
 if __name__=="__main__":
+	## Declaracións ----------------------
 	_ = gettext.gettext
-
-	# ruta na que se atopa o ficheiro indice e todo o que se cree da app pero non o código base
-	__ruta = '../proba'
-	# idioma por defecto da app
-	__idioma = 'gl'
-	# ficheiro e variable onde se gardarán todas as pelis
-	__findice = 'indice.json'
-	__indice = {}
 
 	# nome do ficheiro e variable onde se gardarán todos os idiomas coas súas claves
 	__fcodsIdiomas = '../media/codesIdiomas'
 	__codsIdiomas = {}
 
+	'''
+	Grupos que serven para saber que responde unha persoa. Temos os sis e os
+	nons, se calquer cousa do que responde non está dentro dos grupos non se
+	acepta. Isto faise así en lugar de comparacións directas en previsión
+	de poder ampliar para distintos idiomas.
+	'''
+
+	# variable de configuración
+	__config = {
+			# ruta na que se atopa o ficheiro indice e todo o que se cree da app pero non o código base
+			'ruta': '../proba',
+			# idioma por defecto da app
+			'idioma': 'gl',
+			# ficheiro onde, por defecto, se gardarán todas as pelis. Na config cambiarase
+			'nomeFich': 'indice.json'
+	}
+
+	'''
+	Códigos dados aos distintos tipos de ficheiros posibles.
+	Server o doble propósito de comprobar que se responde algo dentro das claves
+	ou valores das mesmas e sempre gardar no ficheiro as entradas co valor das claves
+	para reducir o gasto de memoria.
+	'''
 	__codes = {'serie': 's',
 				'peli': 'p',
 				'docu': 'd',
@@ -354,30 +366,30 @@ if __name__=="__main__":
 				'libro': 'l',
 				'musica': 'm'}
 
-	__sis = ('si', 's', 'yes', 'y')
-	__nons = ('non', 'no', 'n')
+	# variable onde se gardarán todas as pelis
+	__indice = {}
+
+	## Asignacións ----------------------
 
 	# caragamos o idioma e a configuración do ficheiro de configuración
-	__ruta, __idioma, __findice = config()
+	__config = config()
+	__config['ruta'] = __config['ruta']+'/'
 
 	# unha vez temos a ruta podemos cargar o ficheiro cos datos
-	__indice = u.cargar_json(__ruta+__findice)
+	__indice = u.cargar_json(__config['ruta']+__config['nomeFich'])
 
+	# diccionario coas linguas aceptadas
 	__codsIdiomas = u.cargar_json(__fcodsIdiomas)
 
 	if len(sys.argv)>1:
-
 		if sys.argv[1]=='-?':
 			print('axuda')
 		elif sys.argv[1]=='-h':
 			print('axuda')
-
 		elif len(sys.argv)>3:
 			auto(sys.argv[1:])
-
 		else:
 			print("Dame máis argumentos ou separa os que xa tes")
-
 	else:
 		manual()
 #------------------------------------------------------------------------------------------------
