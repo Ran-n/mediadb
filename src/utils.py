@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #+ Autor:	Ran#
 #+ Creado:	19/07/2019 16:45:18
-#+ Editado:	23/07/2019 18:34:57
+#+ Editado:	24/07/2019 13:16:08
 ## do ficheiro mediadb.py
 #------------------------------------------------------------------------------------------------
 import json
@@ -32,10 +32,12 @@ def cargar_json(fich):
 def gardar_json(fich, contido, sort=False):
 	open(fich, 'w').write(json.dumps(contido, indent=4, sort_keys=sort, ensure_ascii=False))
 #------------------------------------------------------------------------------------------------
+# se existe, crea unha carpeta
 def crear_carp(carp):
 	if Path(carp).is_dir() == False:
 		Path(carp).mkdir(parents=True, exist_ok=True)
 #------------------------------------------------------------------------------------------------
+# imprime un diccionario en modo bonito
 def pJson(diccionario, sort=False):
 	print(json.dumps(diccionario, indent=4, sort_keys=sort))
 #------------------------------------------------------------------------------------------------
