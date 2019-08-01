@@ -6,7 +6,7 @@
 #------------------------------------------------------------------------------------------------
 import utils as u
 import base36 as b36
-import cronos as c
+import khronos as kh
 # ----------------------------
 import gettext
 import sys
@@ -31,7 +31,7 @@ def engadir(nome, tipo, lugar, video, ano, anof, audio, subs, calidade, peso, xe
 	elto['creador'] = creador
 
 	# metemos o elemento con chave a data de metida en codigo 36
-	__indice[b36.code(c.getAgora())] = elto
+	__indice[b36.code(kh.getAgora())] = elto
 #------------------------------------------------------------------------------------------------
 # función que devolve verdadeiro ou falso dependendo de se o nome introducido é valido ou non
 def nomeValido(nome):
@@ -275,7 +275,7 @@ def dialogEditar():
 	print(_('*> Pantalla de edición:'))
 	print('-----------------------')
 	#i# poñoo aqui e non na propia comparación porque senón tería que meter o valor
-	## por cada elemento do diccionario   
+	## por cada elemento do diccionario
 	nome = input(_('Nome da serie a editar: ')).lower()
 	for chave, valor in __indice.items():
 		if nome == valor['nome']:
