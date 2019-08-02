@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #+ Autor:	Ran#
 #+ Creado:	19/07/2019 16:45:18
-#+ Editado:	24/07/2019 13:16:08
+#+ Editado:	02/08/2019 15:02:09
 ## do ficheiro mediadb.py
 #------------------------------------------------------------------------------------------------
 import json
@@ -70,6 +70,7 @@ def anoValido(ano):
 # función para ler o ficheiro de configuración e devolver as variables adecuadas
 def read_config():
 	fich = '../.config'
+
 	# se o ficheiro xa existe
 	if Path(fich).is_file():
 		config = {}

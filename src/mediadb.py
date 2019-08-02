@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 #+ Autor:	Ran#
 #+ Creado:	21/07/2019 18:35:49
-#+ Editado:	24/07/2019 13:16:15
+#+ Editado:	02/08/2019 15:02:01
 #------------------------------------------------------------------------------------------------
 import utils as u
-import base36 as b36
-import khronos as kh
+from khronos import khronos as kh
+from base36 import base36 as b36
 # ----------------------------
 import gettext
 import sys
@@ -281,6 +281,18 @@ def dialogEditar():
 		if nome == valor['nome']:
 			dialogEditarAux(chave)
 #------------------------------------------------------------------------------------------------
+def dialogBuscar():
+	buscar_titulo(input(_('*> Título do elemento a buscar ou palabra clave: ')))
+#------------------------------------------------------------------------------------------------
+# operación que dado un string mostra as coincidencias da bd
+def buscar_titulo(titulo):
+	for elto in __indice.values():
+		if titulo in elto['nome']:
+			print('---------------------------------------')
+			print('> Resultados:')
+			u.pJson(elto)
+			print('---------------------------------------')
+#------------------------------------------------------------------------------------------------
 # función base que se encarga de mostrar o menú de opcións ao usuario e chamar á opción seleccionada
 def menu(operacions):
 	while True:
@@ -290,7 +302,7 @@ def menu(operacions):
 		print(_('0 - Sair (0. para non gardar)'))
 		print(_('1 - Engadir'))
 		print(_('2 - Editar'))
-		print(_('3 - Buscar por título**'))
+		print(_('3 - Buscar por título'))
 
 		op = input(_('Opción: '))
 		print('-----------------------')
@@ -313,7 +325,8 @@ def manual():
 	ops = {'0.': exit,
 			'0': sair,
 			'1': dialogEngadir,
-			'2': dialogEditar
+			'2': dialogEditar,
+			'3': dialogBuscar
 			}
 
 	while True:
@@ -370,7 +383,6 @@ if __name__=="__main__":
 	__indice = {}
 
 	## Asignacións ----------------------
-
 	# caragamos o idioma e a configuración do ficheiro de configuración
 	__config = config()
 	__config['ruta'] = __config['ruta']+'/'
