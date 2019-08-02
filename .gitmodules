@@ -1,0 +1,6 @@
+[submodule "src/base36"]
+	path = src/base36
+	url = https://github.com/Ran-n/base36
+[submodule "src/khronos"]
+	path = src/khronos
+	url = https://github.com/Ran-n/khronos
