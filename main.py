@@ -1,4 +1,5 @@
 #! /usr/bin/python3
+# -*- coding: utf-8 -*-
 #+ Autor:	Ran#
 #+ Creado:	02/08/2019 14:21:04
 #+ Editado:	02/08/2019 15:01:49
