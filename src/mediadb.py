@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #+ Autor:	Ran#
 #+ Creado:	21/07/2019 18:35:49
-#+ Editado:	04/08/2019 23:20:53
+#+ Editado:	04/08/2019 23:25:09
 #------------------------------------------------------------------------------------------------
 import utils as u
 from khronos import khronos as kh
@@ -340,6 +340,7 @@ def dialogBuscar():
 def buscar_titulo(titulo):
 	print('---------------------------------------')
 	print('> Resultados:')
+	print('---------------------------------------')
 	if titulo == '':
 		for elto in __indice.values():
 				u.pJson(elto)
