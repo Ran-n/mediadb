@@ -338,17 +338,15 @@ def dialogBuscar():
 #------------------------------------------------------------------------------------------------
 # operación que dado un string mostra as coincidencias da bd
 def buscar_titulo(titulo):
+	print('---------------------------------------')
+	print('> Resultados:')
 	if titulo == '':
 		for elto in __indice.values():
-				print('---------------------------------------')
-				print('> Resultados:')
 				u.pJson(elto)
 				print('---------------------------------------')
 	else:
 		for elto in __indice.values():
 			if titulo in elto['nome']:
-				print('---------------------------------------')
-				print('> Resultados:')
 				u.pJson(elto)
 				print('---------------------------------------')
 #------------------------------------------------------------------------------------------------
