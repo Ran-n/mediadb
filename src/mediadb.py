@@ -13,7 +13,7 @@ import sys
 from functools import partial
 #------------------------------------------------------------------------------------------------
 # función que dados todos os valores dunha función devolve un elemento completo
-def engadir(nome, epi, tipo, lugar, video, ano, anof, audio, subs, calidade, peso, xenero, creador):
+def engadir(nome, tipo, epi, lugar, video, ano, anof, audio, subs, calidade, peso, xenero, creador):
 	global __indice
 	elto={}
 
@@ -79,6 +79,7 @@ def dialogNome():
 			break
 	return nome
 #------------------------------------------------------------------------------------------------
+# dialogo para engadir episodios a unha serie
 def dialogEpi():
 	valido = False
 	while True:
@@ -172,7 +173,14 @@ def dialogEngadir():
 	print(_('*> Pantalla de engadir:'))
 	print('-----------------------')
 
-	engadir(dialogNome(), dialogEpi(), dialogTipo(), dialogLugar(), dialogVideo(), dialogAno(), dialogAnoF(),
+	nome = dialogNome()
+	tipo = dialogTipo()
+	if tipo == 's':
+		epi = dialogEpi()
+	else:
+		epi = 'NA'
+
+	engadir(nome,  tipo, epi, dialogLugar(), dialogVideo(), dialogAno(), dialogAnoF(),
 	dialogAudio(), dialogSubs(), dialogCalidade(), dialogPeso(), dialogXenero(), dialogCreador())
 #------------------------------------------------------------------------------------------------
 # función que colle e cambia un campo da variable que garda tódolos
@@ -196,31 +204,6 @@ def dialogEditarAux(chave):
 	if edicion:
 		editar(chave, 'nome', dialogNome())
 
-	# epi
-	while True:
-		valido, edicion = u.snValido(input(_(' > Editar episodios? (s/n): ')).lower())
-		if valido: break
-	if edicion:
-		while True:
-			opcion = input(_(' > Engadir(+), eliminar(-) ou substituir(*)?: '))
-			if opcion == '+':
-				suma = __indice[chave]['epi'] + dialogEpi()
-				# se non se fai nesta orde erro
-				suma = list(set(suma))
-				suma.sort()
-				editar(chave, 'epi', suma)
-				break
-			elif opcion == '-':
-				u.pJson(__indice[chave]['epi'])
-				eliminar = list(set(input(_(' > Episodios a eliminar separados por coma(,): ')).split(',')))
-				for ele in eliminar:
-					if ele in __indice[chave]['epi']:
-						__indice[chave]['epi'].remove(ele)
-				break
-			elif opcion == '*':
-				editar(chave, 'epi', dialogEpi())
-				break
-
 	# tipo
 	while True:
 		valido, edicion = u.snValido(input(_(' > Editar tipo? (s/n): ')).lower())
@@ -228,6 +211,33 @@ def dialogEditarAux(chave):
 			break
 	if edicion:
 		editar(chave, 'tipo', dialogTipo())
+
+	# só o mostramos se tratamos cunha serie
+	if __indice[chave]['tipo'] == 's':
+		# epi
+		while True:
+			valido, edicion = u.snValido(input(_(' > Editar episodios? (s/n): ')).lower())
+			if valido: break
+		if edicion:
+			while True:
+				opcion = input(_(' > Engadir(+), eliminar(-) ou substituir(*)?: '))
+				if opcion == '+':
+					suma = __indice[chave]['epi'] + dialogEpi()
+					# se non se fai nesta orde erro
+					suma = list(set(suma))
+					suma.sort()
+					editar(chave, 'epi', suma)
+					break
+				elif opcion == '-':
+					u.pJson(__indice[chave]['epi'])
+					eliminar = list(set(input(_(' > Episodios a eliminar separados por coma(,): ')).split(',')))
+					for ele in eliminar:
+						if ele in __indice[chave]['epi']:
+							__indice[chave]['epi'].remove(ele)
+					break
+				elif opcion == '*':
+					editar(chave, 'epi', dialogEpi())
+					break
 
 	# lugar
 	while True:
