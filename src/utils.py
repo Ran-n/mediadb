@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #+ Autor:	Ran#
 #+ Creado:	19/07/2019 16:45:18
-#+ Editado:	02/08/2019 15:02:09
+#+ Editado:	04/08/2019 22:22:31
 ## do ficheiro mediadb.py
 #------------------------------------------------------------------------------------------------
 import json
@@ -66,6 +66,16 @@ def anoValido(ano):
 		return True
 	else:
 		return False
+#------------------------------------------------------------------------------------------------
+# función que se encarga de devolver verdadeiro se o episodio esta ben posto
+def epi_valido(epi):
+	if 'x' in epi:
+		temp, epi = epi.split('x')
+
+		if (temp.isdigit()) & (epi.isdigit()):
+			return True
+
+	return False
 #------------------------------------------------------------------------------------------------
 # función para ler o ficheiro de configuración e devolver as variables adecuadas
 def read_config():

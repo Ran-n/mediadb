@@ -13,11 +13,12 @@ import sys
 from functools import partial
 #------------------------------------------------------------------------------------------------
 # función que dados todos os valores dunha función devolve un elemento completo
-def engadir(nome, tipo, lugar, video, ano, anof, audio, subs, calidade, peso, xenero, creador):
+def engadir(nome, epi, tipo, lugar, video, ano, anof, audio, subs, calidade, peso, xenero, creador):
 	global __indice
 	elto={}
 
 	elto['nome'] = nome
+	elto['epi'] = epi
 	elto['tipo'] = tipo
 	elto['lugar'] = lugar
 	elto['video'] = video
@@ -77,6 +78,24 @@ def dialogNome():
 		if nomeValido(nome):
 			break
 	return nome
+#------------------------------------------------------------------------------------------------
+def dialogEpi():
+	valido = False
+	while True:
+		epis = input(_(' > Números dos episodios separados por coma: ')).split(',')
+
+		for ele in epis:
+			if u.epi_valido(ele) == False:
+				valido = False
+				break
+			else:
+				valido = True
+
+		if valido: break
+	# se non o facemos así neste orde pois non mos ordea ben
+	epis = list(set(epis))
+	epis.sort()
+	return epis
 #------------------------------------------------------------------------------------------------
 # función que se encarga de de interactuar co usuario para conseguir un tipo
 def dialogTipo():
@@ -153,7 +172,7 @@ def dialogEngadir():
 	print(_('*> Pantalla de engadir:'))
 	print('-----------------------')
 
-	engadir(dialogNome(), dialogTipo(), dialogLugar(), dialogVideo(), dialogAno(), dialogAnoF(),
+	engadir(dialogNome(), dialogEpi(), dialogTipo(), dialogLugar(), dialogVideo(), dialogAno(), dialogAnoF(),
 	dialogAudio(), dialogSubs(), dialogCalidade(), dialogPeso(), dialogXenero(), dialogCreador())
 #------------------------------------------------------------------------------------------------
 # función que colle e cambia un campo da variable que garda tódolos
@@ -166,7 +185,7 @@ def editar(chave, campo, valor):
 # función que se encarga de axudar á interacción co usuario na edición dun elemento
 def dialogEditarAux(chave):
 	print(_('*> Dime que queres editar:, o que cala non otorga :'))
-	if '.' == input(_('*> O que cala non otorga, para ver os valores anteriores pulsa punto (.):')):
+	if '?' == input(_('*> O que cala non otorga, para ver tódolos valores anteriores pulsa "?":')):
 		u.pJson(__indice[chave])
 
 	# nome
@@ -175,9 +194,32 @@ def dialogEditarAux(chave):
 		if valido:
 			break
 	if edicion:
-		#global __indice
-		#__indice[chave]['nome'] = dialogNome()
 		editar(chave, 'nome', dialogNome())
+
+	# epi
+	while True:
+		valido, edicion = u.snValido(input(_(' > Editar episodios? (s/n): ')).lower())
+		if valido: break
+	if edicion:
+		while True:
+			opcion = input(_(' > Engadir(+), eliminar(-) ou substituir(*)?: '))
+			if opcion == '+':
+				suma = __indice[chave]['epi'] + dialogEpi()
+				# se non se fai nesta orde erro
+				suma = list(set(suma))
+				suma.sort()
+				editar(chave, 'epi', suma)
+				break
+			elif opcion == '-':
+				u.pJson(__indice[chave]['epi'])
+				eliminar = list(set(input(_(' > Episodios a eliminar separados por coma(,): ')).split(',')))
+				for ele in eliminar:
+					if ele in __indice[chave]['epi']:
+						__indice[chave]['epi'].remove(ele)
+				break
+			elif opcion == '*':
+				editar(chave, 'epi', dialogEpi())
+				break
 
 	# tipo
 	while True:
