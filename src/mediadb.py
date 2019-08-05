@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #+ Autor:	Ran#
 #+ Creado:	21/07/2019 18:35:49
-#+ Editado:	04/08/2019 23:25:09
+#+ Editado:	05/08/2019 11:14:12
 #------------------------------------------------------------------------------------------------
 import utils as u
 from khronos import khronos as kh
@@ -11,6 +11,7 @@ from base36 import base36 as b36
 import gettext
 import sys
 from functools import partial
+from unidecode import unidecode
 #------------------------------------------------------------------------------------------------
 # función que dados todos os valores dunha función devolve un elemento completo
 def engadir(nome, tipo, epi, lugar, video, ano, anof, audio, subs, calidade, peso, xenero, creador):
@@ -74,7 +75,7 @@ def idiomasValidos(array):
 # función que se encarga de de interactuar co usuario para conseguir un nome
 def dialogNome():
 	while True:
-		nome = input(_(' > Nome: ')).lower()
+		nome = unidecode(input(_(' > Nome: ')).lower())
 		if nomeValido(nome):
 			break
 	return nome
@@ -161,7 +162,8 @@ def dialogPeso():
 #------------------------------------------------------------------------------------------------
 # función que se encarga de de interactuar co usuario para conseguir os xéneros se os ten
 def dialogXenero():
-	return input(_(' > Xéneros separados por coma: ')).split(',')
+	xeneros = input(_(' > Xéneros separados por coma: ')).split(',')
+	return [unidecode(ele) for ele in xeneros]
 #------------------------------------------------------------------------------------------------
 # función que se encarga de de interactuar co usuario para conseguir os creadores se os ten
 def dialogCreador():
